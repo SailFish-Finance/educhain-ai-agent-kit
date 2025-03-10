@@ -1,0 +1,8 @@
+{
+  "apiUrl": "https://min-api.cryptocompare.com/data/pricemultifull",
+  "apiKey": "",
+  "symbols": {
+    "EDU": "EDU",
+    "USD": "USD"
+  }
+}

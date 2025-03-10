@@ -234,6 +234,36 @@ const TOP_POOLS_QUERY = gql`
   }
 `;
 
+// Query to get all pools
+const ALL_POOLS_QUERY = gql`
+  query getAllPools {
+    pools(
+      first: 1000
+      orderBy: totalValueLockedUSD
+      orderDirection: desc
+    ) {
+      id
+      token0 {
+        id
+        symbol
+        name
+      }
+      token1 {
+        id
+        symbol
+        name
+      }
+      feeTier
+      liquidity
+      token0Price
+      token1Price
+      volumeUSD
+      totalValueLockedUSD
+      txCount
+    }
+  }
+`;
+
 // Function to get token information by ID
 export async function getToken(tokenId: string): Promise<Token | null> {
   try {
@@ -402,6 +432,20 @@ export async function getTokenPrice(tokenId: string): Promise<string | null> {
     return priceUSD.toString();
   } catch (error) {
     console.error('Error calculating token price:', error);
+    throw error;
+  }
+}
+
+// Function to get all pools
+export async function getPools(): Promise<Pool[]> {
+  try {
+    const data = await request<PoolQueryResult>(
+      SUBGRAPH_URL,
+      ALL_POOLS_QUERY
+    );
+    return data.pools;
+  } catch (error) {
+    console.error('Error fetching all pools:', error);
     throw error;
   }
 }

@@ -1,0 +1,45 @@
+SailFish DEX Swap Test
+======================
+
+1. Finding best route for EDU/USDC...
+Route type: direct
+Total fee: 0.3%
+Path: USDC/WEDU
+
+2. Getting quote for 10 EDU to USDC...
+Found direct route for 0xd02E8c38a8E3db71f8b2ae30B8186d7874934e12/0x836d275563bAb5E93Fd6Ca62a95dB7065Da94342 with fee: 0.3%
+Input: 10 WEDU
+Expected output: 1.485605 USDC
+Minimum output (with 0.5% slippage): 1.478176 USDC
+Price impact: 0.30%
+Exchange rate: 1 WEDU = 0.1485605 USDC
+
+3. To execute an actual swap, you would use:
+
+    // For token to token swap:
+    swap.swapExactTokensForTokens(
+      "YOUR_PRIVATE_KEY",
+      "0xd02E8c38a8E3db71f8b2ae30B8186d7874934e12",
+      "0x836d275563bAb5E93Fd6Ca62a95dB7065Da94342",
+      "10",
+      0.5
+    );
+    
+    // For EDU to token swap:
+    swap.swapExactEDUForTokens(
+      "YOUR_PRIVATE_KEY",
+      "0x836d275563bAb5E93Fd6Ca62a95dB7065Da94342",
+      "10",
+      0.5
+    );
+    
+    // For token to EDU swap:
+    swap.swapExactTokensForEDU(
+      "YOUR_PRIVATE_KEY",
+      "0x836d275563bAb5E93Fd6Ca62a95dB7065Da94342",
+      "10",
+      0.5
+    );
+    
+
+Tests completed successfully!

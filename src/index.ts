@@ -14,6 +14,8 @@ import {
 import { ethers } from 'ethers';
 import * as subgraph from './subgraph.js';
 import * as blockchain from './blockchain.js';
+import * as swap from './swap.js';
+import * as external_market from './external_market.js';
 
 class SailFishSubgraphServer {
   private server: Server;
@@ -486,6 +488,226 @@ class SailFishSubgraphServer {
             required: ['privateKey', 'tokenAddress', 'toAddress', 'amount'],
           },
         },
+        {
+          name: 'get_swap_quote',
+          description: 'Get a quote for swapping tokens on SailFish DEX',
+          inputSchema: {
+            type: 'object',
+            properties: {
+              tokenIn: {
+                type: 'string',
+                description: 'Address of the input token',
+              },
+              tokenOut: {
+                type: 'string',
+                description: 'Address of the output token',
+              },
+              amountIn: {
+                type: 'string',
+                description: 'Amount of input token to swap',
+              },
+              fee: {
+                type: 'number',
+                description: 'Fee tier (100=0.01%, 500=0.05%, 3000=0.3%, 10000=1%)',
+              },
+            },
+            required: ['tokenIn', 'tokenOut', 'amountIn'],
+          },
+        },
+        {
+          name: 'swap_tokens',
+          description: 'Swap tokens on SailFish DEX (token to token)',
+          inputSchema: {
+            type: 'object',
+            properties: {
+              privateKey: {
+                type: 'string',
+                description: 'Private key of the sender wallet',
+              },
+              tokenIn: {
+                type: 'string',
+                description: 'Address of the input token',
+              },
+              tokenOut: {
+                type: 'string',
+                description: 'Address of the output token',
+              },
+              amountIn: {
+                type: 'string',
+                description: 'Amount of input token to swap',
+              },
+              slippagePercentage: {
+                type: 'number',
+                description: 'Slippage tolerance percentage (default: 0.5)',
+              },
+              fee: {
+                type: 'number',
+                description: 'Fee tier (100=0.01%, 500=0.05%, 3000=0.3%, 10000=1%)',
+              },
+            },
+            required: ['privateKey', 'tokenIn', 'tokenOut', 'amountIn'],
+          },
+        },
+        {
+          name: 'swap_edu_for_tokens',
+          description: 'Swap EDU for tokens on SailFish DEX',
+          inputSchema: {
+            type: 'object',
+            properties: {
+              privateKey: {
+                type: 'string',
+                description: 'Private key of the sender wallet',
+              },
+              tokenOut: {
+                type: 'string',
+                description: 'Address of the output token',
+              },
+              amountIn: {
+                type: 'string',
+                description: 'Amount of EDU to swap',
+              },
+              slippagePercentage: {
+                type: 'number',
+                description: 'Slippage tolerance percentage (default: 0.5)',
+              },
+              fee: {
+                type: 'number',
+                description: 'Fee tier (100=0.01%, 500=0.05%, 3000=0.3%, 10000=1%)',
+              },
+            },
+            required: ['privateKey', 'tokenOut', 'amountIn'],
+          },
+        },
+        {
+          name: 'swap_tokens_for_edu',
+          description: 'Swap tokens for EDU on SailFish DEX',
+          inputSchema: {
+            type: 'object',
+            properties: {
+              privateKey: {
+                type: 'string',
+                description: 'Private key of the sender wallet',
+              },
+              tokenIn: {
+                type: 'string',
+                description: 'Address of the input token',
+              },
+              amountIn: {
+                type: 'string',
+                description: 'Amount of tokens to swap',
+              },
+              slippagePercentage: {
+                type: 'number',
+                description: 'Slippage tolerance percentage (default: 0.5)',
+              },
+              fee: {
+                type: 'number',
+                description: 'Fee tier (100=0.01%, 500=0.05%, 3000=0.3%, 10000=1%)',
+              },
+            },
+            required: ['privateKey', 'tokenIn', 'amountIn'],
+          },
+        },
+        {
+          name: 'get_external_market_data',
+          description: 'Get external market data for EDU from centralized exchanges',
+          inputSchema: {
+            type: 'object',
+            properties: {},
+            required: [],
+          },
+        },
+        {
+          name: 'check_arbitrage_opportunities',
+          description: 'Check for arbitrage opportunities between centralized exchanges and SailFish DEX',
+          inputSchema: {
+            type: 'object',
+            properties: {
+              threshold: {
+                type: 'number',
+                description: 'Minimum price difference percentage to consider as an arbitrage opportunity (default: 1.0)',
+              },
+            },
+            required: [],
+          },
+        },
+        {
+          name: 'update_external_market_config',
+          description: 'Update the configuration for external market data API',
+          inputSchema: {
+            type: 'object',
+            properties: {
+              apiUrl: {
+                type: 'string',
+                description: 'API URL for external market data',
+              },
+              apiKey: {
+                type: 'string',
+                description: 'API key for external market data (if required)',
+              },
+              symbols: {
+                type: 'object',
+                properties: {
+                  EDU: {
+                    type: 'string',
+                    description: 'Symbol for EDU token on the external API',
+                  },
+                  USD: {
+                    type: 'string',
+                    description: 'Symbol for USD on the external API',
+                  },
+                },
+                description: 'Symbol mappings for the external API',
+              },
+            },
+            required: [],
+          },
+        },
+        {
+          name: 'get_external_market_config',
+          description: 'Get the current configuration for external market data API',
+          inputSchema: {
+            type: 'object',
+            properties: {},
+            required: [],
+          },
+        },
+        {
+          name: 'wrap_edu',
+          description: 'Wrap EDU to WEDU (Wrapped EDU)',
+          inputSchema: {
+            type: 'object',
+            properties: {
+              privateKey: {
+                type: 'string',
+                description: 'Private key of the wallet',
+              },
+              amount: {
+                type: 'string',
+                description: 'Amount of EDU to wrap',
+              },
+            },
+            required: ['privateKey', 'amount'],
+          },
+        },
+        {
+          name: 'unwrap_wedu',
+          description: 'Unwrap WEDU (Wrapped EDU) to EDU',
+          inputSchema: {
+            type: 'object',
+            properties: {
+              privateKey: {
+                type: 'string',
+                description: 'Private key of the wallet',
+              },
+              amount: {
+                type: 'string',
+                description: 'Amount of WEDU to unwrap',
+              },
+            },
+            required: ['privateKey', 'amount'],
+          },
+        },
       ],
     }));
 
@@ -875,6 +1097,386 @@ class SailFishSubgraphServer {
                 },
               ],
             };
+          }
+          
+          case 'get_swap_quote': {
+            if (!args.tokenIn || typeof args.tokenIn !== 'string') {
+              throw new McpError(ErrorCode.InvalidParams, 'Input token address is required');
+            }
+            
+            if (!args.tokenOut || typeof args.tokenOut !== 'string') {
+              throw new McpError(ErrorCode.InvalidParams, 'Output token address is required');
+            }
+            
+            if (!args.amountIn || typeof args.amountIn !== 'string') {
+              throw new McpError(ErrorCode.InvalidParams, 'Input amount is required');
+            }
+            
+            const slippagePercentage = typeof args.slippagePercentage === 'number' ? args.slippagePercentage : 0.5;
+            
+            const quote = await swap.getSwapQuote(args.tokenIn, args.tokenOut, args.amountIn, slippagePercentage);
+            
+            return {
+              content: [
+                {
+                  type: 'text',
+                  text: JSON.stringify({
+                    inputToken: {
+                      address: args.tokenIn,
+                      symbol: quote.tokenInSymbol,
+                      decimals: quote.tokenInDecimals,
+                      amount: args.amountIn,
+                      rawAmount: ethers.parseUnits(args.amountIn, quote.tokenInDecimals).toString()
+                    },
+                    outputToken: {
+                      address: args.tokenOut,
+                      symbol: quote.tokenOutSymbol,
+                      decimals: quote.tokenOutDecimals,
+                      amount: quote.formattedAmountOut,
+                      minimumAmount: quote.formattedMinimumAmountOut,
+                      rawAmount: quote.amountOut,
+                      rawMinimumAmount: quote.minimumAmountOut
+                    },
+                    exchangeRate: (Number(quote.formattedAmountOut) / Number(args.amountIn)).toString(),
+                    priceImpact: quote.priceImpact.toFixed(2),
+                    routeType: quote.route.type,
+                    slippage: slippagePercentage.toString(),
+                    note: "Amounts are formatted using the token's decimal places. Raw amounts are in wei units."
+                  }, null, 2),
+                },
+              ],
+            };
+          }
+          
+          case 'swap_tokens': {
+            if (!args.privateKey || typeof args.privateKey !== 'string') {
+              throw new McpError(ErrorCode.InvalidParams, 'Private key is required');
+            }
+            
+            if (!args.tokenIn || typeof args.tokenIn !== 'string') {
+              throw new McpError(ErrorCode.InvalidParams, 'Input token address is required');
+            }
+            
+            if (!args.tokenOut || typeof args.tokenOut !== 'string') {
+              throw new McpError(ErrorCode.InvalidParams, 'Output token address is required');
+            }
+            
+            if (!args.amountIn || typeof args.amountIn !== 'string') {
+              throw new McpError(ErrorCode.InvalidParams, 'Input amount is required');
+            }
+            
+            const slippagePercentage = typeof args.slippagePercentage === 'number' ? args.slippagePercentage : 0.5;
+            const fee = typeof args.fee === 'number' ? args.fee : 3000; // Default to 0.3%
+            
+            const result = await swap.swapExactTokensForTokens(
+              args.privateKey,
+              args.tokenIn,
+              args.tokenOut,
+              args.amountIn,
+              slippagePercentage
+            );
+            
+            return {
+              content: [
+                {
+                  type: 'text',
+                  text: JSON.stringify(result, null, 2),
+                },
+              ],
+            };
+          }
+          
+          case 'swap_edu_for_tokens': {
+            if (!args.privateKey || typeof args.privateKey !== 'string') {
+              throw new McpError(ErrorCode.InvalidParams, 'Private key is required');
+            }
+            
+            if (!args.tokenOut || typeof args.tokenOut !== 'string') {
+              throw new McpError(ErrorCode.InvalidParams, 'Output token address is required');
+            }
+            
+            if (!args.amountIn || typeof args.amountIn !== 'string') {
+              throw new McpError(ErrorCode.InvalidParams, 'Input amount is required');
+            }
+            
+            const slippagePercentage = typeof args.slippagePercentage === 'number' ? args.slippagePercentage : 0.5;
+            const fee = typeof args.fee === 'number' ? args.fee : 3000; // Default to 0.3%
+            
+            const result = await swap.swapExactEDUForTokens(
+              args.privateKey,
+              args.tokenOut,
+              args.amountIn,
+              slippagePercentage
+            );
+            
+            return {
+              content: [
+                {
+                  type: 'text',
+                  text: JSON.stringify(result, null, 2),
+                },
+              ],
+            };
+          }
+          
+          case 'swap_tokens_for_edu': {
+            if (!args.privateKey || typeof args.privateKey !== 'string') {
+              throw new McpError(ErrorCode.InvalidParams, 'Private key is required');
+            }
+            
+            if (!args.tokenIn || typeof args.tokenIn !== 'string') {
+              throw new McpError(ErrorCode.InvalidParams, 'Input token address is required');
+            }
+            
+            if (!args.amountIn || typeof args.amountIn !== 'string') {
+              throw new McpError(ErrorCode.InvalidParams, 'Input amount is required');
+            }
+            
+            const slippagePercentage = typeof args.slippagePercentage === 'number' ? args.slippagePercentage : 0.5;
+            const fee = typeof args.fee === 'number' ? args.fee : 3000; // Default to 0.3%
+            
+            const result = await swap.swapExactTokensForEDU(
+              args.privateKey,
+              args.tokenIn,
+              args.amountIn,
+              slippagePercentage
+            );
+            
+            return {
+              content: [
+                {
+                  type: 'text',
+                  text: JSON.stringify(result, null, 2),
+                },
+              ],
+            };
+          }
+          
+          case 'get_external_market_data': {
+            try {
+              const data = await external_market.getExternalMarketData();
+              
+              return {
+                content: [
+                  {
+                    type: 'text',
+                    text: JSON.stringify(data, null, 2),
+                  },
+                ],
+              };
+            } catch (error) {
+              console.error('Error getting external market data:', error);
+              return {
+                content: [
+                  {
+                    type: 'text',
+                    text: JSON.stringify({ 
+                      error: 'Failed to fetch external market data',
+                      message: (error as Error).message,
+                      note: 'You may need to update the external market API configuration'
+                    }, null, 2),
+                  },
+                ],
+                isError: true,
+              };
+            }
+          }
+          
+          case 'check_arbitrage_opportunities': {
+            try {
+              const threshold = typeof args.threshold === 'number' ? args.threshold : 1.0;
+              const opportunities = await external_market.checkArbitrageOpportunities(threshold);
+              
+              return {
+                content: [
+                  {
+                    type: 'text',
+                    text: JSON.stringify(opportunities, null, 2),
+                  },
+                ],
+              };
+            } catch (error) {
+              console.error('Error checking arbitrage opportunities:', error);
+              return {
+                content: [
+                  {
+                    type: 'text',
+                    text: JSON.stringify({ 
+                      error: 'Failed to check arbitrage opportunities',
+                      message: (error as Error).message,
+                      note: 'You may need to update the external market API configuration'
+                    }, null, 2),
+                  },
+                ],
+                isError: true,
+              };
+            }
+          }
+          
+          case 'update_external_market_config': {
+            try {
+              const newConfig: any = {};
+              
+              if (typeof args.apiUrl === 'string') {
+                newConfig.apiUrl = args.apiUrl;
+              }
+              
+              if (typeof args.apiKey === 'string') {
+                newConfig.apiKey = args.apiKey;
+              }
+              
+              if (typeof args.symbols === 'object' && args.symbols !== null) {
+                newConfig.symbols = {} as { EDU: string; USD: string };
+                
+                if (typeof (args.symbols as any).EDU === 'string') {
+                  newConfig.symbols.EDU = (args.symbols as any).EDU;
+                }
+                
+                if (typeof (args.symbols as any).USD === 'string') {
+                  newConfig.symbols.USD = (args.symbols as any).USD;
+                }
+              }
+              
+              external_market.updateConfig(newConfig);
+              const currentConfig = external_market.getConfig();
+              
+              return {
+                content: [
+                  {
+                    type: 'text',
+                    text: JSON.stringify({
+                      success: true,
+                      message: 'External market API configuration updated',
+                      config: currentConfig
+                    }, null, 2),
+                  },
+                ],
+              };
+            } catch (error) {
+              console.error('Error updating external market config:', error);
+              return {
+                content: [
+                  {
+                    type: 'text',
+                    text: JSON.stringify({ 
+                      error: 'Failed to update external market API configuration',
+                      message: (error as Error).message
+                    }, null, 2),
+                  },
+                ],
+                isError: true,
+              };
+            }
+          }
+          
+          case 'get_external_market_config': {
+            try {
+              const config = external_market.getConfig();
+              
+              return {
+                content: [
+                  {
+                    type: 'text',
+                    text: JSON.stringify(config, null, 2),
+                  },
+                ],
+              };
+            } catch (error) {
+              console.error('Error getting external market config:', error);
+              return {
+                content: [
+                  {
+                    type: 'text',
+                    text: JSON.stringify({ 
+                      error: 'Failed to get external market API configuration',
+                      message: (error as Error).message
+                    }, null, 2),
+                  },
+                ],
+                isError: true,
+              };
+            }
+          }
+          
+          case 'wrap_edu': {
+            if (!args.privateKey || typeof args.privateKey !== 'string') {
+              throw new McpError(ErrorCode.InvalidParams, 'Private key is required');
+            }
+            
+            if (!args.amount || typeof args.amount !== 'string') {
+              throw new McpError(ErrorCode.InvalidParams, 'Amount is required');
+            }
+            
+            try {
+              const result = await swap.wrapEDU(args.privateKey, args.amount);
+              
+              return {
+                content: [
+                  {
+                    type: 'text',
+                    text: JSON.stringify({
+                      ...result,
+                      message: `Successfully wrapped ${args.amount} EDU to WEDU`,
+                      note: "WEDU (Wrapped EDU) is required for interacting with SailFish DEX. You can unwrap it back to EDU at any time."
+                    }, null, 2),
+                  },
+                ],
+              };
+            } catch (error) {
+              console.error('Error wrapping EDU to WEDU:', error);
+              return {
+                content: [
+                  {
+                    type: 'text',
+                    text: JSON.stringify({ 
+                      error: 'Failed to wrap EDU to WEDU',
+                      message: (error as Error).message
+                    }, null, 2),
+                  },
+                ],
+                isError: true,
+              };
+            }
+          }
+          
+          case 'unwrap_wedu': {
+            if (!args.privateKey || typeof args.privateKey !== 'string') {
+              throw new McpError(ErrorCode.InvalidParams, 'Private key is required');
+            }
+            
+            if (!args.amount || typeof args.amount !== 'string') {
+              throw new McpError(ErrorCode.InvalidParams, 'Amount is required');
+            }
+            
+            try {
+              const result = await swap.unwrapWEDU(args.privateKey, args.amount);
+              
+              return {
+                content: [
+                  {
+                    type: 'text',
+                    text: JSON.stringify({
+                      ...result,
+                      message: `Successfully unwrapped ${args.amount} WEDU to EDU`,
+                    }, null, 2),
+                  },
+                ],
+              };
+            } catch (error) {
+              console.error('Error unwrapping WEDU to EDU:', error);
+              return {
+                content: [
+                  {
+                    type: 'text',
+                    text: JSON.stringify({ 
+                      error: 'Failed to unwrap WEDU to EDU',
+                      message: (error as Error).message
+                    }, null, 2),
+                  },
+                ],
+                isError: true,
+              };
+            }
           }
           
           default:

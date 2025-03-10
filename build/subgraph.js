@@ -219,6 +219,35 @@ const TOP_POOLS_QUERY = gql `
     }
   }
 `;
+// Query to get all pools
+const ALL_POOLS_QUERY = gql `
+  query getAllPools {
+    pools(
+      first: 1000
+      orderBy: totalValueLockedUSD
+      orderDirection: desc
+    ) {
+      id
+      token0 {
+        id
+        symbol
+        name
+      }
+      token1 {
+        id
+        symbol
+        name
+      }
+      feeTier
+      liquidity
+      token0Price
+      token1Price
+      volumeUSD
+      totalValueLockedUSD
+      txCount
+    }
+  }
+`;
 // Function to get token information by ID
 export function getToken(tokenId) {
     return __awaiter(this, void 0, void 0, function* () {
@@ -376,6 +405,19 @@ export function getTokenPrice(tokenId) {
         }
         catch (error) {
             console.error('Error calculating token price:', error);
+            throw error;
+        }
+    });
+}
+// Function to get all pools
+export function getPools() {
+    return __awaiter(this, void 0, void 0, function* () {
+        try {
+            const data = yield request(SUBGRAPH_URL, ALL_POOLS_QUERY);
+            return data.pools;
+        }
+        catch (error) {
+            console.error('Error fetching all pools:', error);
             throw error;
         }
     });
