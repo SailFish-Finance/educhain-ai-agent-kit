@@ -1,4 +1,8 @@
-# SailFish DEX MCP Server
+<div align="center">
+# EDUCHAIN Agent Kit
+
+![SailfishAgent](https://github.com/user-attachments/assets/32a0f51a-fb86-4841-b120-b581d9db6fbf)
+</div>
 
 This MCP (Model Context Protocol) server provides tools and resources for interacting with the SailFish DEX, a Uniswap v3 fork on the EDU blockchain. It allows Claude to query information about tokens, pools, and perform swaps through the SailFish DEX.
 
