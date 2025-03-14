@@ -1,12 +1,15 @@
 <div align="center">
-   
-# EDUCHAIN Agent Kit
-
-![SailfishAgent](https://github.com/user-attachments/assets/32a0f51a-fb86-4841-b120-b581d9db6fbf)
 
 <a href="https://glama.ai/mcp/servers/fd54q7e2lz">
   <img width="380" height="200" src="https://glama.ai/mcp/servers/fd54q7e2lz/badge" alt="EDUCHAIN Agent Kit MCP server" />
 </a>
+
+# EDUCHAIN Agent Kit
+
+</div>
+
+![SailfishAgent](https://github.com/user-attachments/assets/32a0f51a-fb86-4841-b120-b581d9db6fbf)
+
 
 This MCP (Model Context Protocol) server provides tools and resources for interacting with EDUCHAIN. It allows Claude to query information about tokens and pools and perform swaps through SailFish DEX.
 
@@ -189,3 +192,7 @@ node build/test.js
 ```
 
 This will test the routing and swap quote functionality without executing actual swaps.
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
