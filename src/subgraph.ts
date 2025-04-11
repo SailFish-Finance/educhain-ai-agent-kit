@@ -14,7 +14,7 @@ import {
   PoolDayData
 } from './types.js';
 
-const SUBGRAPH_URL = 'https://api.goldsky.com/api/public/project_cm5nst0b7iiqy01t6hxww7gao/subgraphs/sailfish-v3-occ-mainnet/1.0.0/gn';
+const SUBGRAPH_URL = 'https://api.goldsky.com/api/public/project_cm1s79wa2tlb701tbchmeaflf/subgraphs/sailfish-v3-occ-mainnet/1.0.3/gn';
 
 // Query to get token information
 const TOKEN_QUERY = gql`
