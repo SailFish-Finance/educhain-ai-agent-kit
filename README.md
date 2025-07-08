@@ -1,3 +1,5 @@
+[![MseeP.ai Security Assessment Badge](https://mseep.net/pr/sailfish-finance-educhain-ai-agent-kit-badge.png)](https://mseep.ai/app/sailfish-finance-educhain-ai-agent-kit)
+
 <div align="center">
 
 <a href="https://glama.ai/mcp/servers/fd54q7e2lz">
