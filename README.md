@@ -4,6 +4,7 @@
   <img width="380" height="200" src="https://glama.ai/mcp/servers/fd54q7e2lz/badge" alt="EDUCHAIN Agent Kit MCP server" />
 </a>
 
+[![Verified on MseeP](https://mseep.ai/badge.svg)](https://mseep.ai/app/c3e20120-62ee-4c7e-b05f-35004b0864cf)
 # EDUCHAIN Agent Kit
 
 </div>
